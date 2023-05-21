@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spc-deploy-svc
+  labels:
+    app: spc
+spec:
+  selector:
+    app: spc
+  type: LoadBalancer
+  ports:
+    - name: spc-svc
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+
+# ---
+# kubectl apply -f .
+# kubectl get svc
+# kubectl get deploy
+# kubectl describe deploy nginx-deploy
+# kubectl get rs
+# kubectl get po
+# kubectl rollout history deployment/nginx-deploy
+# kubectl rollout status deployment/nginx-deploy
+# # update nginx to httpd
+# ---
+# kubectl rollout history deployment/nginx-deploy
+# kubectl rollout status deployment/nginx-deploy
+# kubectl get deployments.apps -w
+# kubectl rollout history deployment/nginx-deploy
+# kubectl rollout status deployment/nginx-deploy
+# kubectl rollout undo deployment/frontend                         # Rollback to the previous deployment
+# # kubectl rollout undo deployment/frontend --to-revision=2         # Rollback to a specific revision

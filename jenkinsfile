@@ -1,0 +1,33 @@
+pipeline {
+    agent { label 'kubernetes' }
+    triggers { pollSCM ('* * * * *') }
+    stages {
+        stage ('VCS') {
+            steps {
+                git branch: 'main',
+                    url: "https://github.com/AseeJenkins/cicd.git"
+            }
+        }
+        stage ('build') {
+            steps {
+                sh " cd Docker && docker image build -t aseerwadham/spc:v1.0 ."
+            }
+        }
+        stage ('push to registry') {
+            steps {
+                sh "docker image push aseerwadham/spc:v1.0"
+            }
+        }
+        stage ('terraform') {
+            agent { label 'Terraform' } 
+            steps {
+                sh "cd terraform && terraform init && terraform apply --auto-approve"
+            }
+        }
+        stage ('deploy') {
+            steps {
+                sh "cd kubernetes && kubectl apply -f ."
+            }
+        }
+    }
+}

@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spc-deploy
+  labels:
+    app: spc
+spec:
+  minReadySeconds: 1 
+  replicas: 4
+  selector: 
+    matchLabels:
+      app: spc
+  template:
+    metadata: 
+      name: spc-deploy
+      labels: 
+        app: spc
+        ver: "1.23"
+    spec:
+      activeDeadlineSeconds: 1
+      containers:
+        - name: spc
+          image: aseerwadham/spc:v1.0
+          ports:
+            - containerPort: 80
+              protocol: TCP
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
